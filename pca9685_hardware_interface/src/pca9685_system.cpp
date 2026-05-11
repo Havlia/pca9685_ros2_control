@@ -136,6 +136,8 @@ std::vector<hardware_interface::StateInterface> Pca9685SystemHardware::export_st
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
   
+  RCLCPP_INFO(rclcpp::get_logger("Pca9685SystemHardware"), "Trying to export %zu interfaces", info_.joints.size());
+
   for (size_t i = 0u; i < info_.joints.size(); i++)
   {
     state_interfaces.emplace_back(info_.joints[i].name,
