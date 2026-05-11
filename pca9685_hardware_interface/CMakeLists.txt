@@ -38,7 +38,9 @@ target_include_directories(pca9685_hardware_interface PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include/pca9685_hardware_interface>
 )
-target_link_libraries(pca9685_hardware_interface PUBLIC i2c)
+target_link_libraries(pca9685_hardware_interface PUBLIC 
+                      i2c
+                      gpiod)
 ament_target_dependencies(
   pca9685_hardware_interface PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
