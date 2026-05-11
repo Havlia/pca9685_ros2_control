@@ -29,8 +29,7 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(Pca9685SystemHardware);
 
   PCA9685_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::CallbackReturn on_init(
-    const hardware_interface::HardwareInfo & info) override;
+  hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
   PCA9685_HARDWARE_INTERFACE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -54,6 +53,8 @@ public:
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
+  ~Pca9685SystemHardware();
+
 private:
   std::vector<double> hw_commands_;
   std::vector<double> hw_position_;
@@ -68,7 +69,6 @@ private:
   double wheel_radius_;
   double wheel_circumference_;
   double max_velocity_;
-  double min_velocity_;
   PiPCA9685::PCA9685 pca;
   gpiod_chip * chip_;
 

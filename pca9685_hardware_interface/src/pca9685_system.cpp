@@ -16,12 +16,11 @@
 
 namespace pca9685_hardware_interface
 {
-hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
-  const hardware_interface::HardwareInfo & info)
+hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(const hardware_interface::HardwareComponentInterfaceParams & params)
 {
 
   if (
-    hardware_interface::SystemInterface::on_init(info) !=
+    hardware_interface::SystemInterface::on_init(params) !=
     hardware_interface::CallbackReturn::SUCCESS)
   {
     return hardware_interface::CallbackReturn::ERROR;
@@ -32,7 +31,6 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
   ticks_per_rev_ = 700.0;
   wheel_radius_ = 0.025;
   max_velocity_ = 10.0;
-  min_velocity_ = 0.0;
 
   chip_ = gpiod_chip_open("/dev/gpiochip0");
 
@@ -56,10 +54,6 @@ hardware_interface::CallbackReturn Pca9685SystemHardware::on_init(
   if (info_.hardware_parameters.count("max_velocity"))
   {
     max_velocity_ = std::stod(info_.hardware_parameters["max_velocity"]);
-  }
-  if (info_.hardware_parameters.count("min_velocity"))
-  {
-    min_velocity_ = std::stod(info_.hardware_parameters["min_velocity"]);
   }
 
   if (!info_.hardware_parameters.count("left_inb_pin") ||
@@ -205,7 +199,6 @@ hardware_interface::return_type Pca9685SystemHardware::read(
 
 
   double ticks_per_rev = ticks_per_rev_;
-  double wheel_circumference = wheel_circumference_;
   
   for (size_t i = 0; i < info_.joints.size(); i++)
   {
