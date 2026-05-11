@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <gpiod.h>
+#include <algorithm>
 
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
@@ -54,8 +56,26 @@ public:
 
 private:
   std::vector<double> hw_commands_;
+  std::vector<double> hw_position_;
+  std::vector<double> hw_velocity_;
+  std::vector<int>    last_encoder_ticks_;
+  std::vector<int>    encoder_ticks_;
+  std::vector<int>    motor_direction_;
+  rclcpp::Time last_time_;
+  int read_right_encoder();
+  int read_left_encoder();
+  double ticks_per_rev_;
+  double wheel_radius_;
+  double wheel_circumference_;
+  double max_velocity_;
+  double min_velocity_;
   PiPCA9685::PCA9685 pca;
-  double command_to_duty_cycle(double command);
+  gpiod_chip * chip_;
+
+  std::vector<gpiod_line*> motor_in1_;
+  std::vector<gpiod_line*> motor_in2_;
+  std::vector<int> dir_pins_;
+  bool request_output_line(gpiod_line* line, const std::string& name);
 };
 
 }  // namespace pca9685_hardware_interface
